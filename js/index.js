@@ -206,7 +206,9 @@ const sortAPI = {
   },
   
   // функция  быстрой сортировки
-  quickSort(arr, comparation),
+  quickSort(arr, comparation){
+    fruits = quickSort(arr, comparation);
+  },
 
   // выполняет сортировку и производит замер времени
   startSort(sort, arr, comparation) {
