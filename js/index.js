@@ -164,8 +164,8 @@ const comparationColor = (a, b) => {
   return secondColor < firstColor;
 };
 
+
 function quickSort(arr, comparation){
-  console.log(arr)
   if (arr.length < 2){
       return arr;
   }
@@ -179,10 +179,10 @@ function quickSort(arr, comparation){
           continue;
       }
       if (comparation(currentItem,arr[i])){
-          less.push(arr[i]);
+          less.push(arr[i])
       }
       else{
-          more.push(arr[i]);
+          more.push(arr[i])
       }
   }
    return [ 
@@ -191,7 +191,6 @@ function quickSort(arr, comparation){
     ...quickSort(more, comparation)
 ] 
 };
-
 
 const sortAPI = {
   // функция сортировки пузырьком
