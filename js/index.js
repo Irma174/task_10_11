@@ -27,6 +27,7 @@ let fruits = JSON.parse(fruitsJSON);
 
 // отрисовка карточек
 const display = () => {
+  
   fruitsList.innerHTML = "";
   let countIndex = 0;
   for (let i = 0; i < fruits.length; i++) {
@@ -185,11 +186,8 @@ function quickSort(arr, comparation){
           more.push(arr[i])
       }
   }
-   return [ 
-    ...quickSort(less, comparation),
-    currentItem,
-    ...quickSort(more, comparation)
-] 
+  arr = [...quickSort(less, comparation), currentItem,...quickSort(more, comparation)] 
+  return arr;
 };
 
 const sortAPI = {
@@ -208,7 +206,7 @@ const sortAPI = {
   },
   
   // функция  быстрой сортировки
-  quickSort,
+  quickSort(arr, comparation),
 
   // выполняет сортировку и производит замер времени
   startSort(sort, arr, comparation) {
