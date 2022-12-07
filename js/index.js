@@ -27,7 +27,7 @@ let fruits = JSON.parse(fruitsJSON);
 
 // отрисовка карточек
 const display = () => {
-  
+ 
   fruitsList.innerHTML = "";
   let countIndex = 0;
   for (let i = 0; i < fruits.length; i++) {
@@ -135,15 +135,24 @@ const filterFruits = () => {
   fruits = fruits.filter((item) => {
     const minWeight = document.querySelector('.minweight__input').value;
     const maxWeight = document.querySelector('.maxweight__input').value;
-    if(maxWeight<minWeight){
+
+    let fruitsWeight = [];
+    fruits.forEach(e => fruitsWeight.push(e.weight));
+  
+    if (isNaN(minWeight)|| minWeight == "" || isNaN(maxWeight) || maxWeight == ""){
+      return Swal.fire('Заполните все поля!');
+    } else if(maxWeight < minWeight){
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Вы задали неверный диапазон веса для сортировки',
-      footer: 'Обновите страницу и начните заново'})
-    } else{
+        text: 'Вы задали неверный диапазон веса для сортировки'})
+    }else if(minWeight < Math.min(...fruitsWeight)){
+      return Swal.fire('Вес не может быть меньше самого маленького фрукта');
+    } else if(maxWeight > Math.max(...fruitsWeight)){
+      return Swal.fire('Вес не должен быть больше, чем у самого большого фрукта');
+    }else{
     const i = item.weight;
-    return (i<= maxWeight) && (i>= minWeight);}
+    return (i <= maxWeight) && (i >= minWeight);}
   });
 };
 
@@ -157,9 +166,10 @@ filterButton.addEventListener('click', () => {
 let sortKind = 'bubbleSort'; // инициализация состояния вида сортировки
 let sortTime = '-'; // инициализация состояния времени сортировки
 
+const colorArray = ['розово-красный','красный','светло-коричневый','оранжевый','желтый','зеленый','голубой','синий','фиолетовый'];
+
  // функция сравнения двух элементов по цвету
 const comparationColor = (a, b) => {
-  const colorArray = ['розово-красный','красный','светло-коричневый','оранжевый','желтый','зеленый','голубой','синий','фиолетовый'];
   firstColor = colorArray.indexOf(a.color);
   secondColor  = colorArray.indexOf(b.color);
   return secondColor < firstColor;
@@ -209,6 +219,7 @@ const sortAPI = {
   quickSort(arr, comparation){
     fruits = quickSort(arr, comparation);
   },
+  
 
   // выполняет сортировку и производит замер времени
   startSort(sort, arr, comparation) {
@@ -249,10 +260,10 @@ addActionButton.addEventListener('click', () => {
     "color": "",
     "weight": ""
   };
-  newFruit.weight = weightInput.value;
+  newFruit.weight = +weightInput.value;
   newFruit.color = colorInput.value;
   newFruit.kind = kindInput.value;
-
+  
   if(newFruit.weight == "" || newFruit.color == "" || newFruit.kind == ""){
     Swal.fire({
       icon: 'error',
@@ -260,8 +271,11 @@ addActionButton.addEventListener('click', () => {
       text: 'Вы забыли заполнить какое-то поле при добавлении!',
       footer: 'При добавлении фрукта нужно заполнять все поля!'
     })
-
-  } else{
+  } else if(!(colorArray.includes(newFruit.color))){
+    Swal.fire('Ваш цвет не соответствует цвету фруктов. Выберите подходящий цвет из предложенных:\n *розово-красный \n *красный\n *светло-коричневый\n *оранжевый\n *желтый\n *зеленый\n *голубой\n *синий\n *фиолетовый')
+} else if(isNaN(parseInt(newFruit.weight))){
+  Swal.fire('Вес должен быть числом!')
+}else{   
     fruits.push(newFruit);
     display();}
 });
